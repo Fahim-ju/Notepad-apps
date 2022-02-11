@@ -54,6 +54,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         else {
             holder.imageView_pin.setImageResource(0);
         }
+
         int color_code = getRandomColor();
         holder.notes_container.setCardBackgroundColor(holder.itemView.getResources().getColor(color_code,null));
 
@@ -86,7 +87,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
         Random random = new Random();
         int random_color = random.nextInt(colorCode.size());
-        return random_color;
+        return colorCode.get(random_color);
     }
 
     @Override
