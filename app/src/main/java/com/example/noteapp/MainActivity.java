@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.noteapp.Adapters.NotesListAdapter;
 import com.example.noteapp.Database.RoomDB;
+import com.example.noteapp.Models.AlertDialogShowing;
 import com.example.noteapp.Models.Notes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -94,7 +96,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         {
             if(resultCode == Activity.RESULT_OK){
             Notes new_notes = (Notes) data.getSerializableExtra("note");
-            database.mainDAO().update(new_notes.getID(),new_notes.getTitle(),new_notes.getNotes());
+            //database.mainDAO().update(new_notes.getID(),new_notes.getTitle(),new_notes.getNotes(),new_notes.getDate());
+            //technically sorting updated notes
+            database.mainDAO().delete(new_notes);
+            new_notes.setID(0);
+            database.mainDAO().insert(new_notes);
+            /*for(Notes x:notes){
+                database.mainDAO().update(x.getID(),(x.getID()+1)%2000);
+            }*/
             notes.clear();
             notes.addAll(database.mainDAO().getAll());
             notesListAdapter.notifyDataSetChanged();
@@ -136,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case R.id.pin:
+
                 if(selectedNote.isPinned()){
                     database.mainDAO().pin(selectedNote.getID(),false);
                     Toast.makeText(MainActivity.this,"Unpinned",Toast.LENGTH_SHORT).show();
@@ -144,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     database.mainDAO().pin(selectedNote.getID(),true);
                     Toast.makeText(MainActivity.this,"Pinned",Toast.LENGTH_SHORT).show();
                 }
+                //technically trying to sort pinned note
+
                 notes.clear();
                 notes.addAll(database.mainDAO().getAll());
                 notesListAdapter.notifyDataSetChanged();
@@ -157,5 +169,15 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             default:
                 return false;
         }
+    }
+
+
+
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        AlertDialogShowing alertDialogShowing = new AlertDialogShowing(MainActivity.this);
+        alertDialogShowing.showDialog();
     }
 }

@@ -52,11 +52,11 @@ public class NotesTakerActivity extends AppCompatActivity {
                 }
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("EEE,dd MMM, yyy, hh:mm aaa");
                 Date date = new Date();
+                System.out.println(formatter.format(date));
                 if(!isOldNote)
                 {
                     notes = new Notes();
                 }
-
                 notes.setTitle(title);
                 notes.setNotes(description);
                 notes.setDate(formatter.format(date));  ///formatter.format(date)
