@@ -19,8 +19,14 @@ public interface MainDAO {
     @Query("SELECT * FROM notes ORDER BY ID DESC")
     List<Notes> getAll();
 
-    @Query("UPDATE notes SET title = :title, notes = :notes WHERE ID=:id")
-    void update(int id,String title,String notes);
+    @Query("SELECT * FROM notes WHERE ID=:id")
+    Notes get(int id);
+
+    @Query("UPDATE notes SET title = :title, notes = :notes ,date=:date WHERE ID=:id")
+    void update(int id,String title,String notes,String date);
+
+    @Query("UPDATE notes SET ID=:idNew WHERE ID=:id")
+     void update(int id, int idNew);
 
     @Delete
     void delete(Notes  notes);
